@@ -1,7 +1,7 @@
 # HU-SteamApi
 #sverre
 #Cyril
-#Bjorn
+#Jorn
 #Mika
 #Prosper
 #Fons
