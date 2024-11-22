@@ -1,4 +1,17 @@
 import json
+import random
+
+def random_game():
+    with open('steam.json', 'r') as json_file: # Opent json file onder de naam 'json_file'
+        data = json.load(json_file)
+
+
+    gamelist = []
+    for game in data:
+        gamelist.append(game['name'])
+    rand = random.randint(0, len(gamelist)+1)
+    return gamelist[rand]
+
 
 def like_to_dislike(game_name):
     with open('steam.json', 'r') as json_file: # Opent json file onder de naam 'json_file'
@@ -15,4 +28,6 @@ def like_to_dislike(game_name):
             percentage = ((negative-positive) / positive) * -100
             print(f'Like to dislike ratio = {no_brackets.replace(',', ' -')} ({round(percentage,2)}%)')
 
-like_to_dislike('Half-Life: Blue Shift')
+
+
+like_to_dislike(random_game())
