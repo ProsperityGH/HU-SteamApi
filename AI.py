@@ -20,12 +20,12 @@ def like_to_dislike(game_name):
     for game in data:                          # Doorloopt elke game in de json
         game_lst = []
         if game_name == game['name']:
-            print(game['name'])
+            print(f'Game: {game['name']}')
             positive = game['positive_ratings']
             negative = game['negative_ratings']
             game_lst.append(positive), game_lst.append(negative)
             no_brackets = str(game_lst)[1:-1]
-            percentage = ((negative-positive) / positive) * -100
+            percentage = (positive / (negative+positive)) * 100
             print(f'Like to dislike ratio = {no_brackets.replace(',', ' -')} ({round(percentage,2)}%)')
 
 
