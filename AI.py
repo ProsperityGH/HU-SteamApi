@@ -1,11 +1,12 @@
-import json
-import random
+import json,random
+
+with open('steam.json', 'r') as json_file:  # Opent json file onder de naam 'json_file'
+    data = json.load(json_file)  # Zet data als alles in de json file, als je data print dan zie je alles in de json
 
 def random_game():
-    with open('steam.json', 'r') as json_file: # Opent json file onder de naam 'json_file'
-        data = json.load(json_file)
-
-
+    '''''
+    Stop elke game in de json file in een lst, en return dan een random item uit de list
+    '''''
     gamelist = []
     for game in data:
         gamelist.append(game['name'])
@@ -14,12 +15,10 @@ def random_game():
 
 
 def like_to_dislike(game_name):
-    with open('steam.json', 'r') as json_file: # Opent json file onder de naam 'json_file'
-        data = json.load(json_file)            # Zet data als alles in de json file, als je data print dan zie je alles in de json
 
     for game in data:                          # Doorloopt elke game in de json
         game_lst = []
-        if game_name == game['name']:
+        if game_name == game['name']:          # Als hij de game in de file tegenkomt, bereken dan het percentage van de reviews
             print(f'Game: {game['name']}')
             positive = game['positive_ratings']
             negative = game['negative_ratings']
@@ -27,7 +26,5 @@ def like_to_dislike(game_name):
             no_brackets = str(game_lst)[1:-1]
             percentage = (positive / (negative+positive)) * 100
             print(f'Like to dislike ratio = {no_brackets.replace(',', ' -')} ({round(percentage,2)}%)')
-
-
 
 like_to_dislike(random_game())
