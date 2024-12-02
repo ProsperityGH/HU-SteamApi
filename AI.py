@@ -44,5 +44,5 @@ def search(letter):
 
     return gamelist
 
-print(search('b'))
+print(search('Counter'))
 #like_to_dislike(random_game())
