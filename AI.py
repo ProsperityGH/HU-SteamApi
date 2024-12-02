@@ -29,11 +29,20 @@ def like_to_dislike(game_name):
 
 def search(letter):
     gamelist = []
-    for game in data:
-        gamelist.append(game["name"])
-    for item in gamelist:
-        if letter in item:
-            print(item)
+    swapped = True
 
-search('yo')
+    for game in data:
+        if letter in game["name"]:
+            gamelist.append(game["name"])
+
+    while swapped:
+        swapped = False
+        for i in range(len(gamelist)-1):
+            if gamelist[i] > gamelist[i+1]:
+                gamelist[i], gamelist[i + 1] = gamelist[i+1], gamelist[i]
+                swapped = True
+
+    return gamelist
+
+print(search('b'))
 #like_to_dislike(random_game())
