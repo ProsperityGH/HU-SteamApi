@@ -27,4 +27,23 @@ def like_to_dislike(game_name):
             percentage = (positive / (negative+positive)) * 100
             print(f'Like to dislike ratio = {no_brackets.replace(',', ' -')} ({round(percentage,2)}%)')
 
-like_to_dislike(random_game())
+def search(letter):
+    gamelist = []
+    swapped = True
+
+    for game in data:
+        if letter in game["name"]:
+            gamelist.append(game["name"])
+
+    while swapped:
+        swapped = False
+        for i in range(len(gamelist)-1):
+            if gamelist[i] > gamelist[i+1]:
+                gamelist[i], gamelist[i + 1] = gamelist[i+1], gamelist[i]
+                swapped = True
+
+    return gamelist
+
+print(search('b'))
+print(search('Counter'))
+#like_to_dislike(random_game())
