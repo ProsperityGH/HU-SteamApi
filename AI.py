@@ -29,24 +29,30 @@ def mediaan_en_gemiddelde():
         print("No playtimes found for the selected genre.")
         return None, None
 
-    x = len(playtime_list)-1
-    y = x / 2
+    x = len(playtime_list)
+    y = x // 2
     swapped = True
 
     while swapped: # Sorteert de lijst
         swapped = False
-        for i in range(x): # Sorteer playtime_list
+        for i in range(x-1): # Sorteer playtime_list
             if playtime_list[i] > playtime_list[i+1]:
                 playtime_list[i], playtime_list[i+1] = playtime_list[i+1], playtime_list[i]
                 swapped = True
-        for e in range(x): # Sorteer average_list
+        for e in range(x-1): # Sorteer average_list
             if average_list[e] > average_list[e+1]:
                 average_list[e], average_list[e+1] = average_list[e+1], average_list[e]
                 swapped = True
 
     gemiddelde = sum(average_list)/len(average_list)
 
-    return playtime_list[int(y)], round(gemiddelde, 2)
+    if x % 2 == 0:
+        # Als de lijst een even getal in lengte is, return dan het midden van de twee middelste getallen
+        print(len(playtime_list))
+        return ((playtime_list[y-1] + playtime_list[y]) / 2), round(gemiddelde, 2)
+    else:
+        print(len(playtime_list))
+        return float(playtime_list[int(y)]), round(gemiddelde, 2)
 
 
 
