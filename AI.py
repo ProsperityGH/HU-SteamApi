@@ -1,31 +1,28 @@
-import json,random
+import json
 
 with open('steam.json', 'r') as json_file:  # Opent json file onder de naam 'json_file'
     data = json.load(json_file)  # Zet data als alles in de json file, als je data print dan zie je alles in de json
 
-def random_game():
-    '''''
-    Stop elke game in de json file in een lst, en return dan een random item uit de list
-    '''''
-    gamelist = []
-    for game in data:
-        gamelist.append(game['name'])
-    rand = random.randint(0, len(gamelist)+1)
-    return gamelist[rand]
+def mediaan():
+    playtime_list = []
+    swapped = True
 
+    for median in data:
+        playtime_list.append(median['median_playtime'])
 
-def like_to_dislike(game_name):
+    x = len(playtime_list)-1
+    y = x / 2
 
-    for game in data:                          # Doorloopt elke game in de json
-        game_lst = []
-        if game_name == game['name']:          # Als hij de game in de file tegenkomt, bereken dan het percentage van de reviews
-            print(f'Game: {game['name']}')
-            positive = game['positive_ratings']
-            negative = game['negative_ratings']
-            game_lst.append(positive), game_lst.append(negative)
-            no_brackets = str(game_lst)[1:-1]
-            percentage = (positive / (negative+positive)) * 100
-            print(f'Like to dislike ratio = {no_brackets.replace(',', ' -')} ({round(percentage,2)}%)')
+    while swapped:
+        swapped = False
+        for i in range(x):
+            if playtime_list[i] > playtime_list[i+1]:
+                playtime_list[i], playtime_list[i+1] = playtime_list[i+1], playtime_list[i]
+                swapped = True
+
+    print(playtime_list)
+    return playtime_list[int(y)]
+
 
 def search(letter):
     gamelist = []
@@ -44,6 +41,5 @@ def search(letter):
 
     return gamelist
 
-print(search('b'))
-print(search('Counter'))
-#like_to_dislike(random_game())
+# print(search('b'))
+print(mediaan())
