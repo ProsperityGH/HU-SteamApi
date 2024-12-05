@@ -48,11 +48,9 @@ def mediaan_en_gemiddelde():
 
     if x % 2 == 0:
         # Als de lijst een even getal in lengte is, return dan het midden van de twee middelste getallen
-        print(len(playtime_list))
-        return ((playtime_list[y-1] + playtime_list[y]) / 2), round(gemiddelde, 2)
+        return str(f'De mediaan van de playtime is {((playtime_list[y-1] + playtime_list[y]) / 2)} en de gemiddelde playtime is {round(gemiddelde, 2)}')
     else:
-        print(len(playtime_list))
-        return float(playtime_list[int(y)]), round(gemiddelde, 2)
+        return str(f'De mediaan van de playtime is {float(playtime_list[int(y)])} en de gemiddelde playtime is {round(gemiddelde, 2)}')
 
 
 
