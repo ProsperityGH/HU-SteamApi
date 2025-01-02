@@ -58,8 +58,11 @@ def search(letter):
     gamelist = []
     swapped = True
 
+    normalized_letter = letter.lower().replace(" ", "")
+
     for game in data:
-        if letter in game["name"]:
+        normalized_name = game["name"].lower().replace(" ", "")
+        if normalized_letter in normalized_name:
             gamelist.append(game["name"])
 
     while swapped:
@@ -71,5 +74,5 @@ def search(letter):
 
     return gamelist
 
-# print(search('b'))
+print(search('sigma'))
 print(mediaan_en_gemiddelde())
