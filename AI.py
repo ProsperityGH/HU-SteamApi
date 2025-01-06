@@ -74,5 +74,8 @@ def search(letter):
 
     return gamelist
 
-print(search('sigma'))
-print(mediaan_en_gemiddelde())
+# def voorspellende_statistiek():
+
+
+print(search(''))
+# print(mediaan_en_gemiddelde())
