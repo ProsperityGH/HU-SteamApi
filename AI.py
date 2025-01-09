@@ -79,51 +79,43 @@ def gradient_descent(num_iterations=1000, learning_rate=0.0001):
     positive_ratings = [game['positive_ratings'] for game in filtered_data]
     average_playtime = [game['average_playtime'] for game in filtered_data]
 
-    def gradient_descent(num_iterations=1000, learning_rate=0.0001):
-        """Performs gradient descent on positive ratings and average playtime."""
-        # Filter out games with 0 positive ratings
-        filtered_data = [game for game in data if game['positive_ratings'] > 0]
+    def min_max_scale(values):
+        min_val = min(values)
+        max_val = max(values)
+        scaled_values = [(val - min_val) / (max_val - min_val) for val in values]
+        return scaled_values, min_val, max_val
 
-        positive_ratings = [game['positive_ratings'] for game in filtered_data]
-        average_playtime = [game['average_playtime'] for game in filtered_data]
+    def reverse_min_max_scale(value, min_val, max_val):
+        return value * (max_val - min_val) + min_val
 
-        def min_max_scale(values):
-            min_val = min(values)
-            max_val = max(values)
-            scaled_values = [(val - min_val) / (max_val - min_val) for val in values]
-            return scaled_values, min_val, max_val
+    x_scaled, x_min, x_max = min_max_scale(positive_ratings)
+    y_scaled, y_min, y_max = min_max_scale(average_playtime)
 
-        def reverse_min_max_scale(value, min_val, max_val):
-            return value * (max_val - min_val) + min_val
+    a = 0
+    b = 0
+    n = len(x_scaled)
 
-        x_scaled, x_min, x_max = min_max_scale(positive_ratings)
-        y_scaled, y_min, y_max = min_max_scale(average_playtime)
+    a_values = []  # To track the intercept over iterations
+    b_values = []  # To track the slope over iterations
 
-        a = 0
-        b = 0
-        n = len(x_scaled)
+    for _ in range(num_iterations):
+        for index in range(n):
+            xk = x_scaled[index]
+            yk = y_scaled[index]
+            error = (a + b * xk) - yk
+            a -= error * learning_rate
+            b -= xk * error * learning_rate
+        a_values.append(a)
+        b_values.append(b)
 
-        a_values = []  # To track the intercept over iterations
-        b_values = []  # To track the slope over iterations
+    # Revert intercept and slope using the integrated reverse function
+    a_original = reverse_min_max_scale(a, y_min, y_max)
+    b_original = b * (y_max - y_min) / (x_max - x_min)
 
-        for _ in range(num_iterations):
-            for index in range(n):
-                xk = x_scaled[index]
-                yk = y_scaled[index]
-                error = (a + b * xk) - yk
-                a -= error * learning_rate
-                b -= xk * error * learning_rate
-            a_values.append(a)
-            b_values.append(b)
+    print("Gradient Descent Results:")
+    print(f"Intercept (a): {a_original}")
+    print(f"Voor elke positive rating increased de average playtime met {round(b_original, 4)}")
 
-        # Revert intercept and slope using the integrated reverse function
-        a_original = reverse_min_max_scale(a, y_min, y_max)
-        b_original = b * (y_max - y_min) / (x_max - x_min)
-
-        print("Gradient Descent Results:")
-        print(f"Intercept (a): {a_original}")
-        print(f"Voor elke positive rating increased de average playtime met {round(b_original, 4)}")
-
-        return a_original, b_original
+    return a_original, b_original
 
 gradient_descent()
