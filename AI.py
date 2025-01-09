@@ -79,9 +79,10 @@ def genre_search(genre):
     normalized_genre = genre.lower().replace(" ", "")
 
     for game in data:
-        # Normaliseer genres van de game en controleer of het opgegeven genre erin zit
+        # Normaliseer genres van de game
         game_genres = [g.strip().lower().replace(" ", "") for g in game["genres"].split(";")]
-        if normalized_genre in game_genres:
+        # Controleer of een van de genres begint met de opgegeven zoekterm
+        if any(g.startswith(normalized_genre) for g in game_genres):
             gamelist.append(game["name"])
 
     # Sorteer de lijst alfabetisch
@@ -145,4 +146,4 @@ def gradient_descent(num_iterations=1000, learning_rate=0.0001):
 #mediaan_en_gemiddelde()
 #search('a')
 #gradient_descent()
-genre_search('casual')
+genre_search('casu')
