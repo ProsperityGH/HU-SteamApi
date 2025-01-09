@@ -46,8 +46,8 @@ def genre_stats(genre):
         mediaan = playtime_list[x // 2]
 
     # Print resultaten
-    play_time_list = [gemiddelde,mediaan]
-    return mediaan, gemiddelde
+    gem_med_list = [gemiddelde,mediaan]
+    return gem_med_list
 
 
 def search(letter):
