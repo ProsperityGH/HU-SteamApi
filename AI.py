@@ -12,44 +12,43 @@ def genres():
 
     return genre_list
 
-def mediaan_en_gemiddelde():
+def genre_stats(genre):
     playtime_list = []
     average_list = []
 
-    print(genres())
-    genre = str(input(f"Choose a genre from the list above: "))
+    # Normaliseer het genre (kleine letters en verwijder spaties)
+    normalized_genre = genre.lower().replace(" ", "")
 
-    for playtime in data:
-        if genre in playtime["genres"].split(";"): # Checkt of de gekozen genre in de game zit, zo ja dan word hij aan de lijst toegevoegd
-            playtime_list.append(playtime['median_playtime'])
-            average_list.append(playtime['average_playtime'])
+    for game in data:
+        # Normaliseer genres van de game
+        game_genres = [g.strip().lower().replace(" ", "") for g in game["genres"].split(";")]
+        # Controleer of een van de genres begint met de opgegeven zoekterm
+        if any(g.startswith(normalized_genre) for g in game_genres):
+            playtime_list.append(game['median_playtime'])
+            average_list.append(game['average_playtime'])
 
     if not playtime_list:
-        print("No playtimes found for the selected genre.")
+        print(f"No playtimes found for the selected genre '{genre}'.")
         return None, None
 
+    # Sorteer de lijsten voor mediane berekening
+    playtime_list.sort()
+    average_list.sort()
+
+    # Bereken gemiddelde van de gemiddelde playtime
+    gemiddelde = sum(average_list) / len(average_list)
+
+    # Bereken de mediaan
     x = len(playtime_list)
-    y = x // 2
-    swapped = True
-
-    while swapped: # Sorteert de lijst
-        swapped = False
-        for i in range(x-1): # Sorteer playtime_list
-            if playtime_list[i] > playtime_list[i+1]:
-                playtime_list[i], playtime_list[i+1] = playtime_list[i+1], playtime_list[i]
-                swapped = True
-        for e in range(x-1): # Sorteer average_list
-            if average_list[e] > average_list[e+1]:
-                average_list[e], average_list[e+1] = average_list[e+1], average_list[e]
-                swapped = True
-
-    gemiddelde = sum(average_list)/len(average_list)
-
     if x % 2 == 0:
-        # Als de lijst een even getal in lengte is, return dan het midden van de twee middelste getallen
-        return str(f'De mediaan van de playtime is {((playtime_list[y-1] + playtime_list[y]) / 2)} en de gemiddelde playtime is {round(gemiddelde, 2)}')
+        mediaan = (playtime_list[x // 2 - 1] + playtime_list[x // 2]) / 2
     else:
-        return str(f'De mediaan van de playtime is {float(playtime_list[int(y)])} en de gemiddelde playtime is {round(gemiddelde, 2)}')
+        mediaan = playtime_list[x // 2]
+
+    # Print resultaten
+    print(f"De mediaan van de playtime is {mediaan} en de gemiddelde playtime is {round(gemiddelde, 2)}.")
+    return mediaan, gemiddelde
+
 
 def search(letter):
     gamelist = []
@@ -71,30 +70,7 @@ def search(letter):
 
     return gamelist
 
-def genre_search(genre):
-    gamelist = []
-    swapped = True
 
-    # Normaliseer het genre (kleine letters en verwijder spaties)
-    normalized_genre = genre.lower().replace(" ", "")
-
-    for game in data:
-        # Normaliseer genres van de game
-        game_genres = [g.strip().lower().replace(" ", "") for g in game["genres"].split(";")]
-        # Controleer of een van de genres begint met de opgegeven zoekterm
-        if any(g.startswith(normalized_genre) for g in game_genres):
-            gamelist.append(game["name"])
-
-    # Sorteer de lijst alfabetisch
-    while swapped:
-        swapped = False
-        for i in range(len(gamelist)-1):
-            if gamelist[i] > gamelist[i+1]:
-                gamelist[i], gamelist[i + 1] = gamelist[i+1], gamelist[i]
-                swapped = True
-
-    print(gamelist)
-    return gamelist
 
 def gradient_descent(num_iterations=1000, learning_rate=0.0001):
     """Performs gradient descent on positive ratings and average playtime."""
@@ -146,4 +122,4 @@ def gradient_descent(num_iterations=1000, learning_rate=0.0001):
 #mediaan_en_gemiddelde()
 #search('a')
 #gradient_descent()
-genre_search('casu')
+genre_stats('indi')
