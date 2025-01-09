@@ -1,4 +1,5 @@
 import json
+import matplotlib.pyplot as plt
 
 with open('steam.json', 'r') as json_file:  # Opent json file onder de naam 'json_file'
     data = json.load(json_file)  # Zet data als alles in de json file, als je data print dan zie je alles in de json
@@ -121,5 +122,5 @@ def gradient_descent(num_iterations=1000, learning_rate=0.0001):
 
 #mediaan_en_gemiddelde()
 #search('a')
-#gradient_descent()
-genre_stats('indi')
+gradient_descent()
+#genre_stats('indi')
