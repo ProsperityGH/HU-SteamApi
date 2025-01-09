@@ -71,6 +71,27 @@ def search(letter):
 
     return gamelist
 
+def genre_search(genre):
+    gamelist = []
+    swapped = True
+
+    # Loop door alle games in de data
+    for game in data:
+        # Controleer of het gegeven genre voorkomt in de genres van de game
+        if genre in game["genres"].split(";"):
+            gamelist.append(game["name"])
+
+    # Sorteer de lijst van games alfabetisch
+    while swapped:
+        swapped = False
+        for i in range(len(gamelist)-1):
+            if gamelist[i] > gamelist[i+1]:
+                gamelist[i], gamelist[i + 1] = gamelist[i+1], gamelist[i]
+                swapped = True
+
+    print(gamelist)
+    return gamelist
+
 def gradient_descent(num_iterations=1000, learning_rate=0.0001):
     """Performs gradient descent on positive ratings and average playtime."""
     # Filter out games with 0 positive ratings
@@ -118,4 +139,7 @@ def gradient_descent(num_iterations=1000, learning_rate=0.0001):
 
     return a_original, b_original
 
-gradient_descent()
+#mediaan_en_gemiddelde()
+#search('a')
+#gradient_descent()
+genre_search('Casual')
