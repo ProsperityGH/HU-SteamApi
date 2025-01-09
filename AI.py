@@ -46,7 +46,7 @@ def genre_stats(genre):
         mediaan = playtime_list[x // 2]
 
     # Print resultaten
-    print(f"De mediaan van de playtime is {mediaan} en de gemiddelde playtime is {round(gemiddelde, 2)}.")
+    play_time_list = [gemiddelde,mediaan]
     return mediaan, gemiddelde
 
 
