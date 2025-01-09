@@ -1,5 +1,4 @@
 import json
-import matplotlib.pyplot as plt
 
 with open('steam.json', 'r') as json_file:  # Opent json file onder de naam 'json_file'
     data = json.load(json_file)  # Zet data als alles in de json file, als je data print dan zie je alles in de json
@@ -80,60 +79,51 @@ def gradient_descent(num_iterations=1000, learning_rate=0.0001):
     positive_ratings = [game['positive_ratings'] for game in filtered_data]
     average_playtime = [game['average_playtime'] for game in filtered_data]
 
-    def min_max_scale(values):
-        min_val = min(values)
-        max_val = max(values)
-        scaled_values = [(val - min_val) / (max_val - min_val) for val in values]
-        return scaled_values, min_val, max_val
+    def gradient_descent(num_iterations=1000, learning_rate=0.0001):
+        """Performs gradient descent on positive ratings and average playtime."""
+        # Filter out games with 0 positive ratings
+        filtered_data = [game for game in data if game['positive_ratings'] > 0]
 
-    def reverse_min_max_scale(scaled_values, min_val, max_val):
-        return [val * (max_val - min_val) + min_val for val in scaled_values]
+        positive_ratings = [game['positive_ratings'] for game in filtered_data]
+        average_playtime = [game['average_playtime'] for game in filtered_data]
 
-    x_scaled, x_min, x_max = min_max_scale(positive_ratings)
-    y_scaled, y_min, y_max = min_max_scale(average_playtime)
+        def min_max_scale(values):
+            min_val = min(values)
+            max_val = max(values)
+            scaled_values = [(val - min_val) / (max_val - min_val) for val in values]
+            return scaled_values, min_val, max_val
 
-    a = 0
-    b = 0
-    n = len(x_scaled)
+        def reverse_min_max_scale(value, min_val, max_val):
+            return value * (max_val - min_val) + min_val
 
-    a_values = []  # To track the intercept over iterations
-    b_values = []  # To track the slope over iterations
+        x_scaled, x_min, x_max = min_max_scale(positive_ratings)
+        y_scaled, y_min, y_max = min_max_scale(average_playtime)
 
-    for _ in range(num_iterations):
-        for index in range(n):
-            xk = x_scaled[index]
-            yk = y_scaled[index]
-            error = (a + b * xk) - yk
-            a -= error * learning_rate
-            b -= xk * error * learning_rate
-        a_values.append(a)
-        b_values.append(b)
+        a = 0
+        b = 0
+        n = len(x_scaled)
 
-    a_original = y_min + a * (y_max - y_min)
-    b_original = b * (y_max - y_min) / (x_max - x_min)
+        a_values = []  # To track the intercept over iterations
+        b_values = []  # To track the slope over iterations
 
-    print("Gradient Descent Results:")
-    print(f"Intercept (a): {a_original}")
-    print(f"Slope (b): {b_original}")
-    print("The relationship suggests that for every unit increase in positive ratings, the average playtime changes by the slope value.")
+        for _ in range(num_iterations):
+            for index in range(n):
+                xk = x_scaled[index]
+                yk = y_scaled[index]
+                error = (a + b * xk) - yk
+                a -= error * learning_rate
+                b -= xk * error * learning_rate
+            a_values.append(a)
+            b_values.append(b)
 
-    # Scatterplot of data with regression line
-    plt.figure(figsize=(10, 6))
+        # Revert intercept and slope using the integrated reverse function
+        a_original = reverse_min_max_scale(a, y_min, y_max)
+        b_original = b * (y_max - y_min) / (x_max - x_min)
 
-    # Original data points
-    plt.scatter(positive_ratings, average_playtime, color='blue', label='Data Points', alpha=0.5)
+        print("Gradient Descent Results:")
+        print(f"Intercept (a): {a_original}")
+        print(f"Voor elke positive rating increased de average playtime met {round(b_original, 4)}")
 
-    # Regression line
-    x_vals = range(int(min(positive_ratings)), int(max(positive_ratings)) + 1)
-    y_vals = [a_original + b_original * x for x in x_vals]
-    plt.plot(x_vals, y_vals, color='red', label='Regression Line')
-
-    plt.xlabel("Positive Ratings")
-    plt.ylabel("Average Playtime")
-    plt.title("Gradient Descent: Positive Ratings vs Average Playtime")
-    plt.legend()
-    plt.show()
-
-    return a_original, b_original
+        return a_original, b_original
 
 gradient_descent()
