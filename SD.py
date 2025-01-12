@@ -200,10 +200,12 @@ if (int(current_time) < 24 and int(current_time) > 6):
     home_button.pack(side="left", padx=20, pady=10)
     search_button = tk.Button(nav_menu_frame, text="Search", command=ZoekPagina, font=("Helvetica", 18), bg="#F0F0F0", fg="black", relief="flat")
     search_button.pack(side="left", padx=20, pady=10)
+    genre_btn = tk.Button(nav_menu_frame, text="Genre", command=GenrePagina, font=("Helvetica", 18), bg="#F0F0F0",
+                          fg="black", relief="flat")
+    genre_btn.pack(side="left", padx=20, pady=10)
     about_button = tk.Button(nav_menu_frame, text="About Us", command=over_ons, font=("Helvetica", 18), bg="#F0F0F0", fg="black", relief="flat")
     about_button.pack(side="left", padx=20, pady=10)
-    genre_btn = tk.Button(nav_menu_frame, text="Genre", command=GenrePagina, font=("Helvetica", 18), bg="#F0F0F0", fg="black", relief="flat")
-    genre_btn.pack(side="left", padx=20, pady=10)
+
     Home_Page()
 
     DB_SETTINGS = {
