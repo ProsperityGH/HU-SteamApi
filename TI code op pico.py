@@ -48,15 +48,16 @@ def afstad_sensor(threshold=20):
 poll_obj = select.poll()
 poll_obj.register(sys.stdin, select.POLLIN)
 
-index = 0
-while True:
 
+while True:
+    #als de afstansensor een signaal oppakt print bij "BEWEGING"
     if afstad_sensor():
         print("BEWEGING")
         time.sleep(0.5)
     poll_results = poll_obj.poll(1)
     if poll_results:
         data = sys.stdin.readline().strip()
+        #als er data is gelezen door de seriële port wordt de neopixel aangepast op basis van de data die binnen is gekomen
         if data.isdigit():
             value = int(data)
             if 1 <= value <= 5:
