@@ -46,42 +46,98 @@ if (int(current_time) < 24 and int(current_time) > 6):
 #Dit is de genre pagina
     def GenrePagina():
         global search_results, current_index
+
+        # Verwijder bestaande widgets in het content_frame
         for widget in content_frame.winfo_children():
             widget.destroy()
-        search_label = tk.Label(content_frame, text="Type een genre in om de statestieken van de genre te zien:", font=("Helvetica", 24, "bold"),
-                                bg='#F5F5F5')
+
+        # Titel en zoekbalk
+        search_label = tk.Label(
+            content_frame,
+            text="Type een genre in om de statistieken van de genre te zien:",
+            font=("Helvetica", 24, "bold"),
+            bg='#F5F5F5'
+        )
         search_label.pack(pady=50)
+
         search_frame = tk.Frame(content_frame, bg='#F5F5F5')
         search_frame.pack(pady=10)
-        search_entry = tk.Entry(search_frame, width=40, font=("Helvetica", 18), bd=2, relief="solid", fg="gray")
-        search_entry.grid(row=0, column=0, padx=(0, 10))  # Add padding between entry and button
-        search_button = tk.Button(search_frame, text="Search", font=("Helvetica", 18), bg="#4CAF50", fg="black",
-                                  relief="flat", padx=20, pady=10)
+
+        search_entry = tk.Entry(
+            search_frame,
+            width=40,
+            font=("Helvetica", 18),
+            bd=2,
+            relief="solid"
+        )
+        search_entry.grid(row=0, column=0, padx=(0, 10))
+
+        search_button = tk.Button(
+            search_frame,
+            text="Zoek",
+            font=("Helvetica", 18),
+            bg="#4CAF50",
+            fg="white",
+            relief="flat",
+            padx=20,
+            pady=10
+        )
         search_button.grid(row=0, column=1)
+
         result_frame = tk.Frame(content_frame, bg='#F5F5F5')
         result_frame.pack(pady=20)
 
-
         def Zoeken():
             search_term = search_entry.get().strip()
-            if not search_term:
-                messagebox.showwarning("Input Error", "Please enter a genre name to search.")
-                return
-            mediaan, gemiddelde = genre_stats(search_term)
 
-            if mediaan is None or gemiddelde is None:
-                messagebox.showwarning("No Results", f"No data found for the genre '{search_term}'.")
+            if not search_term:
+                messagebox.showwarning("Input Error", "Vul een genre in om te zoeken.")
                 return
+
+            # Analyseer het genre met genre_analysis
+            resultaten = genre_analysis(search_term)
+
+            if resultaten is None:
+                messagebox.showwarning("Geen Resultaten", f"Geen gegevens gevonden voor het genre '{search_term}'.")
+                return
+
+            # Verwijder oude resultaten
             for widget in result_frame.winfo_children():
                 widget.destroy()
-            mediaan_label = tk.Label(result_frame, text=f"Median Playtime: {round(mediaan,1)} minutes",
-                                     font=("Helvetica", 24, 'bold'), bg='#F5F5F5')
-            mediaan_label.pack(pady=10)
-            gemiddelde_label = tk.Label(result_frame, text=f"Average Playtime: {round(gemiddelde,1)} minutes",
-                                        font=("Helvetica", 24, 'bold'), bg='#F5F5F5')
+
+            # Toon nieuwe resultaten
+            gemiddelde_label = tk.Label(
+                result_frame,
+                text=f"Gemiddelde Speeltijd: {round(resultaten['Gemiddelde'], 1)} minuten",
+                font=("Helvetica", 24, "bold"),
+                bg='#F5F5F5'
+            )
             gemiddelde_label.pack(pady=10)
+
+            mediaan_label = tk.Label(
+                result_frame,
+                text=f"Mediaan Speeltijd: {round(resultaten['Mediaan'], 1)} minuten",
+                font=("Helvetica", 24, "bold"),
+                bg='#F5F5F5'
+            )
+            mediaan_label.pack(pady=10)
+
+            gradient_label = tk.Label(
+                result_frame,
+                text=(
+                    f"Intercept (a): {round(resultaten['Gradient Descent Intercept'], 2)}"
+                    f"Slope (b): {round(resultaten['Gradient Descent Slope'], 4)}"
+                ),
+                font=("Helvetica", 20),
+                bg='#F5F5F5',
+                justify="left"
+            )
+            gradient_label.pack(pady=10)
+
         search_button.config(command=Zoeken)
-#Dit is de zoekpagina
+
+
+    #Dit is de zoekpagina
     def ZoekPagina():
         global search_results, current_index
         for widget in content_frame.winfo_children():
@@ -260,4 +316,4 @@ if (int(current_time) < 24 and int(current_time) > 6):
             knop = False
         root.mainloop()
 else:
-    print("Het is bedtijd jongeman, ga slapen")
+    print("Het is bedtijd jongeman, ga slapen")
