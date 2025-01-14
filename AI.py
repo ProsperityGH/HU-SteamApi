@@ -14,9 +14,6 @@ def genres():
     return genre_list
 
 def genre_analysis(genre, num_iterations=1000, learning_rate=0.0001):
-    """
-    Perform genre statistics and gradient descent analysis on positive ratings and average playtime.
-    """
     # Normaliseer het genre (kleine letters en verwijder spaties)
     normalized_genre = genre.lower().replace(" ", "")
 
